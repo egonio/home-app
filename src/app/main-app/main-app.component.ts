@@ -2,36 +2,59 @@ import { Component, OnInit } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 
-interface WeatherResponse {
-  weather: [
+interface ConditionsResponse {
+  current_observation:
     {
-      description: string;
-      icon: string;
-      id: number;
-      main: string;
-    }
-  ];
-  wind: {
-    deg: number;
-    gust: number;
-    speed: number;
-  };
-  main: {
-    humidity: number;
-    pressure: number;
-    temp: number;
-    temp_max: number;
-    temp_min: number;
-  };
-  name: string;
-  sys: {
-    country: string;
-  };
+      display_location: {
+        city: string,
+        country: string,
+        state: string,
+      };
+      feelslike_c: string;
+      feelslike_f: string;
+      weather: string;
+      temp_c: string;
+      temp_f: string;
+      wind_dir: string;
+      wind_gust_kph: string;
+      wind_gust_mph: string;
+      wind_kph: string;
+      wind_mph: string;
+      windchill_c: string;
+      windchill_f: string;
+      relative_humidity: string;
+      pressure_in: string;
+      pressure_trend: string;
+      precip_today_in: string;
+      precip_today_metric: string;
+    };
+}
+
+interface ForecastDay {
+  date: {
+    monthname: string;
+    weekday: string;
+    day: number; };
+  pop: number;
+  conditions: string;
+  high: {
+    celsius: string;
+    fahrenheit: string; };
+  low: {
+    celsius: string;
+    fahrenheit: string; };
+  avehumidity: number;
 }
 
 interface ForecastResponse {
-  city: string;
+  forecast: {
+    simpleforecast: {
+      forecastday: ForecastDay[];
+    };
+  };
 }
+
+
 
 
 interface CoordinatesResponse {
@@ -49,6 +72,12 @@ interface CoordinatesResponse {
 })
 export class MainAppComponent implements OnInit {
 
+  static METRIC = 'METRIC';
+  static IMPERIAL = 'IMPERIAL';
+  static FORECAST = 'FORECAST';
+  static CONDITIONS = 'CONDITIONS';
+
+
   constructor( private http: HttpClient) { }
 
   hour: number;
@@ -59,19 +88,44 @@ export class MainAppComponent implements OnInit {
   date: String;
   longitude: number;
   latitude: number;
-  weatherAPI = '6bad6663746be9e7d0a8ac040d60a419';
-  weatherURL = 'https://api.openweathermap.org/data/2.5/weather?';
-  forecastURL = 'https://api.openweathermap.org/data/2.5/forecast?';
-  currentTemp: number;
-  maxTemp: number;
-  minTemp: number;
-  weatherType: string;
-  weatherDescription: string;
-  weatherID: number;
-  city: string;
-  wind: number;
-  country: string;
+  weatherAPI = '9203778439be69d8';
+  forecastURL = 'http://api.wunderground.com/api/9203778439be69d8/forecast/q/';
+  conditionsURL = 'http://api.wunderground.com/api/9203778439be69d8/conditions/q/';
 
+
+
+  settings: {
+    unit_of_measure: string;
+  } = {
+    unit_of_measure: MainAppComponent.METRIC,
+  };
+
+
+  /****** CONDITIONS ******/
+  city: string;
+  country: string;
+  state: string;
+  feelslike: string;
+  weather: string;
+  temp: string;
+  wind_dir: string;
+  wind_gust: string;
+  wind: string;
+  windchill: string;
+  relative_humidity: string;
+  pressure_in: string;
+  pressure_trend: string;
+  precip_today: string;
+  /* ------- END OF CONDITIONS -------- */
+
+  /******** FORECAST ***************/
+
+   /* ------- END OF FORECAST -------- */
+
+  fourDayForecast: ForecastDay[];
+  weatherResponse;
+
+  weatherWindow = MainAppComponent.CONDITIONS;
 
   ngOnInit() {
     this.getTime();
@@ -87,25 +141,65 @@ export class MainAppComponent implements OnInit {
 
   async getWeather() {
     try {
-      const response = await
-      // tslint:disable-next-line:max-line-length
-      this.http.get<WeatherResponse>(this.weatherURL + 'lat=' + this.latitude + '&lon=' + this.longitude + '&appid=' + this.weatherAPI + '&units=metric')
-        .toPromise();
-      this.currentTemp = response.main.temp;
-      this.maxTemp = response.main.temp_max;
-      this.minTemp = response.main.temp_min;
-      this.weatherType = response.weather[0].main;
-      this.weatherDescription = response.weather[0].description;
-      this.weatherID = response.weather[0].id;
-      this.city = response.name;
-      this.wind = response.wind.speed * 3.6;
-      this.country = response.sys.country;
-      console.log(response);
+      this.weatherResponse = await this.http.get<ConditionsResponse>(this.conditionsURL + this.latitude + ',' + this.longitude + '.json').toPromise();
+      this.weatherWindow = MainAppComponent.CONDITIONS;
+      const directory = this.weatherResponse.current_observation;
+      this.city = directory.display_location.city;
+      this.country = directory.display_location.country;
+      this.state =  directory.display_location.state;
+      this.weather = directory.weather;
+      this.wind_dir = directory.wind_dir;
+      this.relative_humidity = directory.relative_humidity;
+      this.pressure_in = directory.pressure_in;
+      this.pressure_trend = directory.pressure_trend;
+      if (this.settings.unit_of_measure === MainAppComponent.METRIC) {
+        this.feelslike = directory.feelslike_c + ' C';
+        this.temp = directory.temp_c + ' C';
+        this.wind_gust = directory.wind_gust_kph + ' km/h';
+        this.wind = directory.wind_kph + ' km/h';
+        this.windchill = directory.windchill_c + ' C';
+        this.precip_today = directory.precip_today_metric + ' mm';
+      } else {
+        this.feelslike = directory.feelslike_f + ' F';
+        this.temp = directory.temp_f + ' F';
+        this.wind_gust = directory.wind_gust_mph + ' m/h';
+        this.wind = directory.wind_mph + ' m/h';
+        this.windchill = directory.windchill_f + ' F';
+        this.precip_today = directory.precip_today_in + ' in';
+      }
+      console.log(this.weatherResponse);
     } catch (error) {
-
+      console.log(error);
     }
+  }
 
-
+  changeUnits(unit: string) {
+    let directory;
+    if (this.city != null) {
+       directory = this.weatherResponse.current_observation;
+    }
+    if (unit === MainAppComponent.METRIC) {
+      console.log('change unit to metric');
+      this.settings.unit_of_measure = MainAppComponent.METRIC;
+      if (this.city != null) {
+        this.feelslike = directory.feelslike_c + ' C';
+        this.temp = directory.temp_c + ' C';
+        this.wind_gust = directory.wind_gust_kph + ' km/h';
+        this.wind = directory.wind_kph + ' km/h';
+        this.windchill = directory.windchill_c + ' C';
+        this.precip_today = directory.precip_today_metric + ' mm';
+      }
+    } else {
+      this.settings.unit_of_measure = MainAppComponent.IMPERIAL;
+      if (this.city != null) {
+        this.feelslike = directory.feelslike_f + ' F';
+        this.temp = directory.temp_f + ' F';
+        this.wind_gust = directory.wind_gust_mph + ' m/h';
+        this.wind = directory.wind_mph + ' m/h';
+        this.windchill = directory.windchill_f + ' F';
+        this.precip_today = directory.precip_today_in + ' in';
+      }
+    }
   }
 
 
@@ -145,21 +239,33 @@ export class MainAppComponent implements OnInit {
 
   async getForecast() {
     try {
-      const response = await
-      // tslint:disable-next-line:max-line-length
-      this.http.get(this.forecastURL + 'lat=' + this.latitude + '&lon=' + this.longitude + '&appid=' + this.weatherAPI + '&units=metric')
-        .toPromise();
+       // tslint:disable-next-line:max-line-length
+      const response = await this.http.get<ForecastResponse>(this.forecastURL + this.latitude + ',' + this.longitude + '.json').toPromise();
       console.log(response);
+      this.fourDayForecast = response.forecast.simpleforecast.forecastday;
+      this.weatherWindow = MainAppComponent.FORECAST;
+      console.log(this.fourDayForecast);
     } catch (error) {
-
+      console.log(error);
     }
-
   }
 
-  // async way
+  /*
+   getForecastNotAsync() {
+    this.http.get(this.weatherURL + 'lat=' + this.latitude + '&lon=' + this.longitude + '&appid=' + this.weatherAPI + '&units=metric')
+        .toPromise().then(
+          data => {
+            console.log(data);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
+  */
+
   async getLocation() {
     try {
-
       const position: CoordinatesResponse = await this.getPosition() as CoordinatesResponse;
       this.latitude = position.coords.latitude;
       this.longitude = position.coords.longitude;

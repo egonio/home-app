@@ -6,13 +6,44 @@
 <p>Today's Date is {{date}}</p>
 <p>Latitude: {{latitude}}</p>
 <p>Longitude: {{longitude}}</p>
-<div *ngIf="weatherID != null">
-  <p>Current Temperature: {{currentTemp}}</p>
-  <p>Max Temperature: {{maxTemp}}</p>
-  <p>Min Temperature: {{minTemp}}</p>
-  <p>Weather: {{weatherType}} /  {{weatherDescription}}</p>
-  <p>Location: {{city}}, {{country}}</p>
-  <p>Wind Speed: {{wind}}km/hr</p>
+<div *ngIf="city != null && weatherWindow === 'CONDITIONS'">
+  <h1> Weather Details</h1>
+  <button class="btn btn-primary" (click)="changeUnits('METRIC')">Metric</button>
+  <button class="btn btn-primary" (click)="changeUnits('IMPERIAL')">Imperial</button>
+  <p>Location: {{city}}, {{state}} {{country}}</p>
+  <p>Weather: {{weather}}</p>
+  <p>Current Temperature: {{temp}}</p>
+  <p>Wind Chill: {{windchill}}</p>
+  <p>Feels Like: {{feelslike}}</p>
+  <p> Wind: {{wind_dir}} </p>
+  <p>Wind Gust: {{wind_gust}}</p>
+  <p>Humidity: {{relative_humidity}}</p>
+  <p>Pressure: {{pressure_in}}{{pressure_trend}}</p>
+  <p>Precipitation: {{precip_today}}</p>
+</div>
+
+<div *ngIf = "fourDayForecast != null && weatherWindow === 'FORECAST'">
+  <h1>Four Day Forcast!</h1>
+  <button class="btn btn-primary" (click)="changeUnits('METRIC')">Metric</button>
+  <button class="btn btn-primary" (click)="changeUnits('IMPERIAL')">Imperial</button>
+  <div class ="container-fluid">
+    <div class="row" *ngFor="let forecast of fourDayForecast" >
+      <h3> Date: {{forecast.date.weekday}} {{forecast.date.monthname}} {{forecast.date.day}}</h3>
+      <p> Condition: {{forecast.conditions}}</p>
+      <p>
+        High:
+        <span *ngIf="settings.unit_of_measure === 'METRIC'"> {{forecast.high.celsius}}</span>
+        <span *ngIf="settings.unit_of_measure === 'IMPERIAL'"> {{forecast.high.fahrenheit}}</span>
+      </p>
+      <p>
+        Low:
+        <span *ngIf="settings.unit_of_measure === 'METRIC'"> {{forecast.low.celsius}}</span>
+        <span *ngIf="settings.unit_of_measure === 'IMPERIAL'"> {{forecast.low.fahrenheit}}</span>
+      </p>
+      <p>Average Humidity: {{forecast.avehumidity}}</p>
+      <hr>
+    </div>
+  </div>
 </div>
 
 
