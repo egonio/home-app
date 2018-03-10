@@ -1,0 +1,28 @@
+<button class="btn btn-primary"> Time </button>
+<button class="btn btn-primary"> Location</button>
+<button class="btn btn-primary" *ngIf="latitude > 0" (click)="getWeather()"> Weather </button>
+<button class="btn btn-primary" *ngIf="latitude > 0" (click)="getForecast()"> 5 day forcast </button>
+<p>Time is {{timeString}}</p>
+<p>Today's Date is {{date}}</p>
+<p>Latitude: {{latitude}}</p>
+<p>Longitude: {{longitude}}</p>
+<div *ngIf="weatherID != null">
+  <p>Current Temperature: {{currentTemp}}</p>
+  <p>Max Temperature: {{maxTemp}}</p>
+  <p>Min Temperature: {{minTemp}}</p>
+  <p>Weather: {{weatherType}} /  {{weatherDescription}}</p>
+  <p>Location: {{city}}, {{country}}</p>
+  <p>Wind Speed: {{wind}}km/hr</p>
+</div>
+
+
+<!--
+this.currentTemp = response.main.temp;
+      this.maxTemp = response.main.temp_max;
+      this.minTemp = response.main.temp_max;
+      this.weatherType = response.weather[0].main;
+      this.weatherDescription = response.weather[0].description;
+      this.weatherID = response.weather[0].id;
+      this.city = response.name;
+      this.wind = response.wind.speed * 3.6;
+-->
