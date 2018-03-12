@@ -1,59 +1,13 @@
-<button class="btn btn-primary"> Time </button>
-<button class="btn btn-primary"> Location</button>
-<button class="btn btn-primary" *ngIf="latitude > 0" (click)="getWeather()"> Weather </button>
-<button class="btn btn-primary" *ngIf="latitude > 0" (click)="getForecast()"> 5 day forcast </button>
-<p>Time is {{timeString}}</p>
-<p>Today's Date is {{date}}</p>
-<p>Latitude: {{latitude}}</p>
-<p>Longitude: {{longitude}}</p>
-<div *ngIf="city != null && weatherWindow === 'CONDITIONS'">
-  <h1> Weather Details</h1>
-  <button class="btn btn-primary" (click)="changeUnits('METRIC')">Metric</button>
-  <button class="btn btn-primary" (click)="changeUnits('IMPERIAL')">Imperial</button>
-  <p>Location: {{city}}, {{state}} {{country}}</p>
-  <p>Weather: {{weather}}</p>
-  <p>Current Temperature: {{temp}}</p>
-  <p>Wind Chill: {{windchill}}</p>
-  <p>Feels Like: {{feelslike}}</p>
-  <p> Wind: {{wind_dir}} </p>
-  <p>Wind Gust: {{wind_gust}}</p>
-  <p>Humidity: {{relative_humidity}}</p>
-  <p>Pressure: {{pressure_in}}{{pressure_trend}}</p>
-  <p>Precipitation: {{precip_today}}</p>
-</div>
-
-<div *ngIf = "fourDayForecast != null && weatherWindow === 'FORECAST'">
-  <h1>Four Day Forcast!</h1>
-  <button class="btn btn-primary" (click)="changeUnits('METRIC')">Metric</button>
-  <button class="btn btn-primary" (click)="changeUnits('IMPERIAL')">Imperial</button>
-  <div class ="container-fluid">
-    <div class="row" *ngFor="let forecast of fourDayForecast" >
-      <h3> Date: {{forecast.date.weekday}} {{forecast.date.monthname}} {{forecast.date.day}}</h3>
-      <p> Condition: {{forecast.conditions}}</p>
-      <p>
-        High:
-        <span *ngIf="settings.unit_of_measure === 'METRIC'"> {{forecast.high.celsius}}</span>
-        <span *ngIf="settings.unit_of_measure === 'IMPERIAL'"> {{forecast.high.fahrenheit}}</span>
-      </p>
-      <p>
-        Low:
-        <span *ngIf="settings.unit_of_measure === 'METRIC'"> {{forecast.low.celsius}}</span>
-        <span *ngIf="settings.unit_of_measure === 'IMPERIAL'"> {{forecast.low.fahrenheit}}</span>
-      </p>
-      <p>Average Humidity: {{forecast.avehumidity}}</p>
-      <hr>
-    </div>
-  </div>
-</div>
 
 
-<!--
-this.currentTemp = response.main.temp;
-      this.maxTemp = response.main.temp_max;
-      this.minTemp = response.main.temp_max;
-      this.weatherType = response.weather[0].main;
-      this.weatherDescription = response.weather[0].description;
-      this.weatherID = response.weather[0].id;
-      this.city = response.name;
-      this.wind = response.wind.speed * 3.6;
--->
+<button class="btn btn-primary" (click)="useImperial()">Imperial</button>
+<button class="btn btn-primary" (click)="useMetric()">Metric</button>
+<h1>Units of Measure: {{unit}}</h1>
+<hr>
+<p><app-time></app-time></p>
+<p><app-weather></app-weather></p>
+<p><app-forecast></app-forecast></p>
+
+
+
+

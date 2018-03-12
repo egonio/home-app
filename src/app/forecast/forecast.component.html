@@ -1,0 +1,23 @@
+<div>
+  <h1>Four Day Forcast!</h1>
+  <button class="btn btn-primary">Metric</button>
+  <button class="btn btn-primary">Imperial</button>
+  <div class ="container-fluid">
+    <div class="row" *ngFor="let forecast of fourDayForecast" >
+      <h3> Date: {{forecast.date.weekday}} {{forecast.date.monthname}} {{forecast.date.day}}</h3>
+      <p> Condition: {{forecast.conditions}}</p>
+      <p>
+        High:
+        <span> {{forecast.high.celsius}} C </span>
+        <span> {{forecast.high.fahrenheit}} F</span>
+      </p>
+      <p>
+        Low:
+        <span> {{forecast.low.celsius}} C </span>
+        <span> {{forecast.low.fahrenheit}} F</span>
+      </p>
+      <p>Average Humidity: {{forecast.avehumidity}}</p>
+      <hr>
+    </div>
+  </div>
+</div>
