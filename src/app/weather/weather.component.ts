@@ -76,7 +76,6 @@ export class WeatherComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     await this.getLocation();
     this.getWeather();
-
     this.unitSubscription = this.settings.getUnitObservable().subscribe(
       unit => {
         this.unit = unit;
@@ -101,7 +100,6 @@ export class WeatherComponent implements OnInit, OnDestroy {
   async getWeather() {
     try {
       const weatherResponse =  await this.weatherAPIService.getWeather(this.longitude, this.latitude);
-      console.log(weatherResponse);
       const directory = weatherResponse.current_observation;
       this.city = directory.display_location.city;
       this.country = directory.display_location.country;

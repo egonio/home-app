@@ -12,6 +12,8 @@ import { MainAppComponent } from './main-app/main-app.component';
 import { WeatherAPIService } from './services/weatherAPI.service';
 import { ForecastComponent } from './forecast/forecast.component';
 import { SettingsService } from './services/settings.service';
+import { NewsComponent } from './news/news.component';
+import { NewsService } from './services/news.service';
 
 
 
@@ -23,6 +25,7 @@ import { SettingsService } from './services/settings.service';
     GeolocationComponent,
     MainAppComponent,
     ForecastComponent,
+    NewsComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { SettingsService } from './services/settings.service';
   providers: [
     GeolocationService,
     WeatherAPIService,
-    SettingsService
+    SettingsService,
+    NewsService
   ],
   bootstrap: [AppComponent]
 })

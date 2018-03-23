@@ -19,7 +19,10 @@ interface ForecastDay {
   avehumidity: number;
 }
 
-
+export const WEATHER = 'WEATHER';
+export const MAIL = 'MAIL';
+export const SOCIAL = 'SOCIAL';
+export const NEWS = 'NEWS';
 
 @Component({
   selector: 'app-main-app',
@@ -28,19 +31,17 @@ interface ForecastDay {
 })
 export class MainAppComponent implements OnInit, OnDestroy {
 
-  // Called every time that the input properties of a component or a directive are checked. Use it to extend change detection by performing a custom check.
-  // Add 'implements DoCheck' to the class.
-
   constructor(private settings: SettingsService) { }
-  unit: String;
+  unit = '';
   private unitSubscription: Subscription;
+  mode = '';
 
-  ngOnInit() {
+  async ngOnInit() {
     this.unitSubscription = this.settings.getUnitObservable().subscribe(
       unit => {
         this.unit = unit;
     });
-    this.useMetric();
+    await this.useMetric();
   }
 
   ngOnDestroy() {
@@ -54,6 +55,25 @@ export class MainAppComponent implements OnInit, OnDestroy {
   useMetric() {
     this.settings.useMetric();
   }
+
+  showWeather() {
+    this.mode = WEATHER;
+  }
+
+  showMail() {
+    this.mode = MAIL;
+  }
+
+  showSocial() {
+    this.mode = SOCIAL;
+  }
+
+  showNews() {
+    this.mode = NEWS;
+  }
+
+
+
   /*
 
   changeUnits(unit: string) {

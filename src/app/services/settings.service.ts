@@ -8,12 +8,11 @@ export class SettingsService {
 
   IMPERIAL = 'IMPERIAL';
   METRIC  = 'METRIC';
-
-
   private unit = new Subject<string>();
   private unitObservable$ = this.unit.asObservable();
 
-  constructor() { }
+  constructor() {
+  }
 
   useImperial() {
     this.unit.next(this.IMPERIAL);

@@ -48,12 +48,13 @@ export class ForecastComponent implements OnInit, OnDestroy {
               private settings: SettingsService) { }
 
   async ngOnInit() {
-    this.unitSubscription = this.settings.getUnitObservable().subscribe(
+    this.unitSubscription =  await this.settings.getUnitObservable().subscribe(
       unit => {
         this.unit = unit;
     });
     await this.getLocation();
     this.getForecast();
+    this.settings.useMetric();
   }
 
   ngOnDestroy() {
@@ -63,6 +64,7 @@ export class ForecastComponent implements OnInit, OnDestroy {
   async getLocation() {
     try {
       const position: Coordinate = await this.geoLocation.getPosition() as Coordinate;
+      console.log(position);
       this.latitude = position.coords.latitude;
       this.longitude = position.coords.longitude;
     } catch (error) {

@@ -7,7 +7,8 @@ export class GeolocationService  {
 
   public getPosition = function () {
     return new Promise(function (resolve, reject) {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
+      resolve( { coords: {latitude: 43.774467099999995, longitude: -79.5011897 } } );
+      // navigator.geolocation.getCurrentPosition(resolve, reject);
     });
   };
 }

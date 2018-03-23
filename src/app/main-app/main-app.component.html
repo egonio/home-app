@@ -1,13 +1,34 @@
+<p>
+  <button class="btn btn-primary" (click)="useImperial()">Imperial</button>
+  <button class="btn btn-primary" (click)="useMetric()">Metric</button>
+</p>
+
+<p>
+  <button class="btn btn-success" (click)="showWeather()">Weather</button>
+  <button class="btn btn-success" (click)="showMail()">Mail</button>
+  <button class="btn btn-success" (click)="showSocial()">Social</button>
+  <button class="btn btn-success" (click)="showNews()">News</button>
+</p>
 
 
-<button class="btn btn-primary" (click)="useImperial()">Imperial</button>
-<button class="btn btn-primary" (click)="useMetric()">Metric</button>
-<h1>Units of Measure: {{unit}}</h1>
 <hr>
-<p><app-time></app-time></p>
-<p><app-weather></app-weather></p>
-<p><app-forecast></app-forecast></p>
+
+<p>
+  <app-time></app-time>
+</p>
 
 
+<div [hidden]="mode != 'WEATHER'" class="weather-div">
+  <h4>Units of Measure: {{unit}}</h4>
+  <p *ngIf="unit != undefined">
+    <app-weather></app-weather>
+  </p>
 
+  <p *ngIf="unit != undefined">
+    <app-forecast></app-forecast>
+  </p>
+</div>
 
+<div [hidden]="mode != 'NEWS'" class="news-div">
+  <app-news></app-news>
+</div>
