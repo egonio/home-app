@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { SettingsService } from './../services/settings.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, DoCheck } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 interface ForecastDay {
@@ -28,15 +28,19 @@ interface ForecastDay {
 })
 export class MainAppComponent implements OnInit, OnDestroy {
 
+  // Called every time that the input properties of a component or a directive are checked. Use it to extend change detection by performing a custom check.
+  // Add 'implements DoCheck' to the class.
+
   constructor(private settings: SettingsService) { }
   unit: String;
-  unitSubscription: Subscription;
+  private unitSubscription: Subscription;
 
   ngOnInit() {
     this.unitSubscription = this.settings.getUnitObservable().subscribe(
       unit => {
         this.unit = unit;
-      });
+    });
+    this.useMetric();
   }
 
   ngOnDestroy() {

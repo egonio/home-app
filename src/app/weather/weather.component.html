@@ -2,17 +2,20 @@
 <p>Longitude: {{longitude}}</p>
 <div>
   <h1> Weather Details</h1>
-  <button class="btn btn-primary">Metric</button>
-  <button class="btn btn-primary">Imperial</button>
   <p>Location: {{city}}, {{state}} {{country}}</p>
   <p>Weather: {{weather}}</p>
-  <p>Current Temperature: {{temp_c}}</p>
-  <p>Wind Chill: {{windchill_c}}</p>
-  <p>Feels Like: {{feelslike_c}}</p>
+  <p *ngIf="unit === 'METRIC'">Current Temperature: {{temp_c}}</p>
+  <p *ngIf="unit === 'IMPERIAL'">Current Temperature: {{temp_f}}</p>
+  <p *ngIf="unit === 'METRIC'">Wind Chill: {{windchill_c}}</p>
+  <p *ngIf="unit === 'IMPERIAL'">Wind Chill: {{windchill_f}}</p>
+  <p *ngIf="unit === 'METRIC'">Feels Like: {{feelslike_c}}</p>
+  <p *ngIf="unit === 'IMPERIAL'">Feels Like: {{feelslike_f}}</p>
   <p> Wind: {{wind_dir}} </p>
-  <p>Wind Gust: {{wind_gust_kph}}</p>
+  <p *ngIf="unit === 'METRIC'">Wind Gust: {{wind_gust_kph}}</p>
+  <p *ngIf="unit === 'IMPERIAL'">Wind Gust: {{wind_gust_mph}}</p>
   <p>Humidity: {{relative_humidity}}</p>
   <p>Pressure: {{pressure_in}}{{pressure_trend}}</p>
-  <p>Precipitation: {{precip_today_metric}}</p>
+  <p *ngIf="unit === 'METRIC'">Precipitation: {{precip_today_metric}}</p>
+  <p *ngIf="unit === 'IMPERIAL'">Precipitation: {{precip_today_in}}</p>
 </div>
 

@@ -2,15 +2,16 @@ import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
+
 @Injectable()
 export class SettingsService {
 
   IMPERIAL = 'IMPERIAL';
   METRIC  = 'METRIC';
 
-  private unit = new Subject<string>();
 
-  unitObservable$ = this.unit.asObservable();
+  private unit = new Subject<string>();
+  private unitObservable$ = this.unit.asObservable();
 
   constructor() { }
 
@@ -22,7 +23,7 @@ export class SettingsService {
     this.unit.next(this.METRIC);
   }
 
-  getUnitObservable(): Observable<String> {
+  getUnitObservable(): Observable<string> {
     return this.unitObservable$;
   }
 

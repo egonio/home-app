@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { SettingsService } from './../services/settings.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WeatherAPIService } from './../services/weatherAPI.service';
 import { GeolocationService } from './../services/geolocation.service';
 
@@ -31,19 +33,32 @@ interface ForecastDay {
   templateUrl: './forecast.component.html',
   styleUrls: ['./forecast.component.css']
 })
-export class ForecastComponent implements OnInit {
+export class ForecastComponent implements OnInit, OnDestroy {
 
   latitude: number;
   longitude: number;
   fourDayForecast: ForecastDay[];
+  high: string;
+  low: string;
+  unit: string;
+  unitSubscription: Subscription;
 
-  constructor( private geoLocation: GeolocationService, private weatherAPIService: WeatherAPIService) { }
+  constructor(private geoLocation: GeolocationService,
+              private weatherAPIService: WeatherAPIService,
+              private settings: SettingsService) { }
 
   async ngOnInit() {
+    this.unitSubscription = this.settings.getUnitObservable().subscribe(
+      unit => {
+        this.unit = unit;
+    });
     await this.getLocation();
     this.getForecast();
   }
 
+  ngOnDestroy() {
+    this.unitSubscription.unsubscribe();
+  }
 
   async getLocation() {
     try {

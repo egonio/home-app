@@ -63,7 +63,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
   /* ------- END OF CONDITIONS -------- */
 
   /******* SETTINGS  **********/
-  unit: String;
+  unit ;
   unitSubscription: Subscription;
 
   /* ------- END OF CONDITIONS -------- */
