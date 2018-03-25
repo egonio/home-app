@@ -1,12 +1,28 @@
+<form [formGroup]="searchForm" (ngSubmit)="search(searchForm)">
+  <label class="center-block">
+    <input class="form-control" formControlName="search" placeholder="Search">
+    <button class="btn btn-success" type="submit">Search</button>
+  </label>
+</form>
+
 <p>
   <button class="btn btn-primary" (click)="getHeadLines()">Headlines</button>
+  <button class="btn btn-primary" (click)="getCategory('business')">Business</button>
+  <button class="btn btn-primary" (click)="getCategory('entertainment')">Entertainment</button>
+  <button class="btn btn-primary" (click)="getCategory('health')">Health</button>
+  <button class="btn btn-primary" (click)="getCategory('science')">Science</button>
+  <button class="btn btn-primary" (click)="getCategory('sports')">Sports</button>
+  <button class="btn btn-primary" (click)="getCategory('technology')">Technology</button>
+
 </p>
+
 
 
 <div class="container-fluid">
   <div class="row">
     <div class="headlines">
-      <div *ngFor="let article of headlines" class="col-sm-12 col-md-4">
+      <h3>{{message}}</h3>
+      <div *ngFor="let article of newsCards" class="col-sm-12 col-md-4">
         <img src="{{article.urlToImage}}" alt="news photo" style="width: 100%">
         <h4>{{article.title}}</h4>
         <p>{{article.description}}</p>

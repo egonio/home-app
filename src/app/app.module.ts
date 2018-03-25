@@ -1,3 +1,4 @@
+import { ReactiveFormsModule } from '@angular/forms';
 import { GeolocationService } from './services/geolocation.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -29,7 +30,8 @@ import { NewsService } from './services/news.service';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [
     GeolocationService,
